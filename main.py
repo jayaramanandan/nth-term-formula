@@ -51,7 +51,7 @@ def get_layer(data, layer_n):
 
 
 
-def main(max_power):
+def find_diagonal(max_power, diagonal_n):
     nth_term_parts = []
     
     for p in range(1, max_power):
@@ -62,16 +62,28 @@ def main(max_power):
         
         nth_term_matrix = get_nth_term_of_top_layer(modified_matrix)
         
-        nth_term_parts.append(mp.fabs(nth_term_matrix[p-5, 0]))
+        nth_term_parts.append(mp.fabs(nth_term_matrix[p - diagonal_n, 0]))
         
         print("\n\n")
         
     print(matrix(nth_term_parts))
 
-# multiplied by power factorial and divided by pascals triangle terms 
+# multiplied by power factorial and divided by pascals triangle terms
+
+def print_inverse_matrix(max_power):
+    for p in range(1, max_power): 
+        inverse_exponent_matrix = inverse(create_matrix_of_exponents(p)) * mp.factorial(p)
         
-main(20)
-
-print("\n\n")
-
-print(nth_term_of(matrix([274, 1624, 6769, 22449, 63273, 157773, 357423, 749463, 1474473, 2749747, 4899622])) * mp.factorial(8))   
+        modified_matrix = inverse_exponent_matrix * create_matrix_of_pascal(p)
+        
+        for c in range(len(modified_matrix)):
+            column_array = []
+            for r in range(len(modified_matrix)):
+                column_array.append(mp.fabs(modified_matrix[r, c]))
+            
+            print(nth_term_of(matrix(column_array)) * mp.factorial(p))
+            print("\n")
+        
+        print("\n-------------------------------------------------------------------------------\n")
+        
+print_inverse_matrix(5)
