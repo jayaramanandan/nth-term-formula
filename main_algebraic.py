@@ -46,20 +46,40 @@ def print_matrix_factorised(matrix_data):
             print(sp.factor(matrix_data[r, c]))
         print("\n")
 
+def matrix_of_zeros(size):
+    mat = []
+    for i in range(size):
+        mat.append([])
+        for j in range(size):
+            mat[i].append(0)
+        
+    return sp.Matrix(mat)
+
+def create_matrix_of_pascal(power):
+    pascal_matrix = matrix_of_zeros(power + 1)
+    
+    for d in range(power + 1):
+        pascal_matrix[d, d] = (sp.factorial(power - d) * sp.factorial(d)) / sp.factorial(power)
+    
+    return pascal_matrix
+
 def main(max_power):
     for po in range(0, max_power):
         a, p = sp.symbols('a p')
         
         power_matrix = sp.Matrix(define_matrix_array(po))
         
-        modified_matrix = sp.simplify(power_matrix.inv()) * math.factorial(po) * p**po
+        modified_matrix = sp.simplify(power_matrix.inv()) # inverting matrix
+        modified_matrix = modified_matrix * math.factorial(po) * p**po # multiplying matrix by constant factor (power! * p^power)
+        modified_matrix = absolute_matrix(modified_matrix) # removing the alternating negatives
+        modified_matrix = modified_matrix.multiply(create_matrix_of_pascal(po)) # divides by pascal's triangle for each layer
         
-        print("po = ", po)
+        print("po = ", po, "\n\n")
 
-        print_matrix_factorised(absolute_matrix(modified_matrix))
+        print_matrix_factorised(modified_matrix)
         
         print("\n\n-------------------------------------------------------------------------------\n\n\n")
         
         
 
-main(6)
+main(8)
