@@ -1,5 +1,4 @@
 from decimal import *
-import math
 from mpmath import mp, matrix, inverse
 
 mp.prec = 400
@@ -12,7 +11,7 @@ def create_matrix_of_exponents(power):
         matrix_array.append([1])
         
         for c in range(1, power + 1):
-            matrix_array[r].append(math.pow(r, c))
+            matrix_array[r].append(mp.power(r, c))
     
     return matrix(matrix_array)
 
@@ -49,12 +48,10 @@ def get_layer(data, layer_n):
     for i in range(data.cols):
         layer_string += data[layer_n, i]
 
-
-
-def find_diagonal(max_power, diagonal_n):
+def find_diagonal(diagonal_n):
     nth_term_parts = []
     
-    for p in range(1, max_power):
+    for p in range(1, diagonal_n * 2 + 3):
         
         inverse_exponent_matrix = inverse(create_matrix_of_exponents(p)) * mp.factorial(p)
         
@@ -62,28 +59,23 @@ def find_diagonal(max_power, diagonal_n):
         
         nth_term_matrix = get_nth_term_of_top_layer(modified_matrix)
         
-        nth_term_parts.append(mp.fabs(nth_term_matrix[p - diagonal_n, 0]))
+        nth_term_parts.append(round(mp.fabs(nth_term_matrix[p - diagonal_n, 0]), 2))
         
-        print("\n\n")
-        
-    print(matrix(nth_term_parts))
+      
+    print(nth_term_parts[diagonal_n - 1: diagonal_n * 2 + 3])
 
-# multiplied by power factorial and divided by pascals triangle terms
+def nth_term_string(nth_term_matrix):
+    nth_term_string = ""
+    
+    for r in range(len(nth_term_matrix)):
+        nth_term_string += str(nth_term_matrix[r, 0]) + "*x^" + str(len(nth_term_matrix) - r - 1) + " +"
+    
+    return nth_term_string
 
-def print_inverse_matrix(max_power):
-    for p in range(1, max_power): 
-        inverse_exponent_matrix = inverse(create_matrix_of_exponents(p)) * mp.factorial(p)
-        
-        modified_matrix = inverse_exponent_matrix * create_matrix_of_pascal(p)
-        
-        for c in range(len(modified_matrix)):
-            column_array = []
-            for r in range(len(modified_matrix)):
-                column_array.append(mp.fabs(modified_matrix[r, c]))
-            
-            print(nth_term_of(matrix(column_array)) * mp.factorial(p))
-            print("\n")
-        
-        print("\n-------------------------------------------------------------------------------\n")
-        
-print_inverse_matrix(5)
+# multiplied by
+# power factorial and divided by pascals triangle terms
+find_diagonal(6)
+
+#print(nth_term_string(nth_term_of([1764.0, 13132.0, 67284.0, 269325.0, 902055.0, 2637558.0, 6926634.0, 16669653.0, 37312275.0])))
+
+print(nth_term_of([15344, 25984, 40614, 59864, 84364]))
