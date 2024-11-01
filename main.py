@@ -1,4 +1,3 @@
-from decimal import *
 from mpmath import mp, matrix, inverse
 
 mp.prec = 400
@@ -74,8 +73,8 @@ def nth_term_string(nth_term_matrix):
 
 # multiplied by
 # power factorial and divided by pascals triangle terms
-find_diagonal(6)
+#find_diagonal(6)
 
 #print(nth_term_string(nth_term_of([1764.0, 13132.0, 67284.0, 269325.0, 902055.0, 2637558.0, 6926634.0, 16669653.0, 37312275.0])))
 
-print(nth_term_of([15344, 25984, 40614, 59864, 84364]))
+print(nth_term_of([0, 1, 2, 0, 1, 2]))
